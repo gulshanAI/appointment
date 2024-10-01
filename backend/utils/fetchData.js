@@ -43,23 +43,24 @@ const queryDatabase = async (model, query, queryParams) => {
   if (queryParams.sort) {
     query = query.sort(queryParams.sort);
   }
-  const page = queryParams.page || 1;
-  const limit = queryParams.limit || 10;
-  const skip = (page - 1) * limit;
+  // const page = queryParams.page || 1;
+  // const limit = queryParams.limit || 10;
+  // const skip = (page - 1) * limit;
 
-  query = query.skip(skip).limit(limit);
+  // query = query.skip(skip).limit(limit);
 
   const results = await query.exec();
-  const total = await model.countDocuments(filter || {});
+  // const total = await model.countDocuments(filter || {});
 
-  return {
-    pagination: {
-      total,
-      page,
-      pages: Math.ceil(total / limit),
-    },
-    results,
-  };
+  return results;
+  // return {
+  //   pagination: {
+  //     total,
+  //     page,
+  //     pages: Math.ceil(total / limit),
+  //   },
+  //   results,
+  // };
 };
 
 export default queryDatabase;
