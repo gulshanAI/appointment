@@ -1,9 +1,11 @@
+import { useState } from "react";
 import ActionForm from "./components/ActionForm";
 import CalendarBox from "./components/CalendarBox";
 import ViewDetail from "./components/ViewDetail";
 import useAppointment from "./hooks/useAppointment";
 
 function App() {
+  const [viewDetail, setViewDetail] = useState(false);
   const {
     data,
     loading,
@@ -15,10 +17,13 @@ function App() {
     handleUpdateEvents,
     handleDeleteEvent,
   } = useAppointment();
-
+  const closeSummary = () => {
+    setViewDetail(false);
+  };
   if (loading) return <div>Loading...</div>;
   return (
     <div className="container mx-auto">
+      <button onClick={() => setViewDetail(true)}>View Summary</button>
       <CalendarBox
         data={data}
         deleteAppotintMent={deleteAppotintMent}
@@ -27,7 +32,7 @@ function App() {
         handleDeleteEvent={handleDeleteEvent}
       />
       {showAction && <ActionForm addAppointment={addAppointment} />}
-      <ViewDetail data={data} />
+      {viewDetail && <ViewDetail data={data} closeSummary={closeSummary} />}
     </div>
   );
 }
