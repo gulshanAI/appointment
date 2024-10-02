@@ -47,6 +47,12 @@ const useAppointment = () => {
       title: item.title,
       start: item.start,
       end: item.end,
+      extendedProps: {
+        name: item.name,
+        email: item.email,
+        phone: item.phone,
+        notes: item.notes,
+      },
     };
   };
 

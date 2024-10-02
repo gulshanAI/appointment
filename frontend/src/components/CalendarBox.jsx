@@ -62,7 +62,7 @@ export default function CalendarBox({
           headerToolbar={{
             left: "prev,next today",
             center: "title",
-            right: "dayGridMonth,timeGridWeek,timeGridDay",
+            right: "",
           }}
           initialView="timeGridWeek"
           editable={true}
@@ -89,19 +89,26 @@ export default function CalendarBox({
   );
 }
 
+import { ListBulletIcon, TrashIcon } from "@heroicons/react/24/solid";
+
 function renderEventContent(eventInfo, handleDeleteEvent) {
   return (
-    <div>
+    <div className="relative">
+      {/* <div className="group">
+        <ListBulletIcon className="size-4 text-white" />
+        <ul className="absolute right-0 top-0">
+          <li>Start: {eventInfo.event.startStr}</li>
+        </ul>
+      </div> */}
       <p>{eventInfo.event.title}</p>
       <small>{eventInfo.timeText}</small>
-      <button
+      <TrashIcon
+        className="size-4 text-red-500"
         onClick={() => {
           handleDeleteEvent(eventInfo);
           // eventInfo.event.remove();
         }}
-      >
-        Delete
-      </button>
+      />
     </div>
   );
 }

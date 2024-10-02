@@ -18,7 +18,7 @@ function App() {
 
   if (loading) return <div>Loading...</div>;
   return (
-    <>
+    <div className="container mx-auto">
       <CalendarBox
         data={data}
         deleteAppotintMent={deleteAppotintMent}
@@ -27,8 +27,8 @@ function App() {
         handleDeleteEvent={handleDeleteEvent}
       />
       {showAction && <ActionForm addAppointment={addAppointment} />}
-      {/* {viewDetail && <ViewDetail addAppointment={addAppointment} />} */}
-    </>
+      <ViewDetail data={data} />
+    </div>
   );
 }
 

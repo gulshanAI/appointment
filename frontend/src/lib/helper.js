@@ -33,17 +33,31 @@ export const setErrorList = (error) => {
   return errorReturn;
 };
 
-export function convertReadableDateTime(dateString) {
-  const date = new Date(dateString);
-  if (isNaN(date.getTime())) {
-    throw new Error("Invalid date string");
-  }
-  const options = {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
+export function getReadableDateAndTime(isoDate) {
+  const date = new Date(isoDate);
+  const dateOptions = { year: "numeric", month: "short", day: "numeric" };
+  const readableDate = date.toLocaleDateString(undefined, dateOptions);
+  const timeOptions = { hour: "2-digit", minute: "2-digit", hour12: true };
+  const readableTime = date.toLocaleTimeString(undefined, timeOptions);
+  return {
+    date: readableDate,
+    time: readableTime,
   };
-  return date.toLocaleDateString(undefined, options);
+}
+export function convertReadableDateTime(dateString) {
+  if (!dateString) return "NA";
+  const date = new Date(dateString);
+  const options = { year: "numeric", month: "long", day: "numeric" };
+  const formattedDate = date.toLocaleDateString(undefined, options);
+
+  // Format time as "Hour:Minute AM/PM" (e.g., "10:30 AM")
+  const formattedTime = date.toLocaleTimeString(undefined, {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+
+  return `${formattedDate} at ${formattedTime}`;
 }
 
 export const getFirstLastLetter = (name) => {
