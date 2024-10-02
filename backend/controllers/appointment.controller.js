@@ -12,14 +12,7 @@ export const getAppointmentList = asyncHandler(async (req, res, next) => {
 
 export const createAppoitment = asyncHandler(async (req, res, next) => {
   const appt = await Appointment.create(req.body);
-  return successResponse(
-    res,
-    {
-      name: appt.name,
-      id: appt._id,
-    },
-    201
-  );
+  return successResponse(res, appt, 201);
 });
 
 export const updateAppointment = asyncHandler(async (req, res, next) => {
@@ -28,14 +21,7 @@ export const updateAppointment = asyncHandler(async (req, res, next) => {
   if (!apt) {
     throw new NotFoundError("Appointment not found");
   }
-  return successResponse(
-    res,
-    {
-      name: apt.name,
-      id: apt._id,
-    },
-    201
-  );
+  return successResponse(res, apt, 201);
 });
 
 export const deleteApt = asyncHandler(async (req, res, next) => {

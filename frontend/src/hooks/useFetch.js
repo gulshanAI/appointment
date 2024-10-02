@@ -16,7 +16,7 @@ const useFetch = (url, filter, callBack = null) => {
     const response = await axiosFireApi(url, "get", params);
     if (response.success) {
       let resData = response.data;
-      if (callBack) resData = callBack(response.data);
+      if (callBack) resData = callBack(response.data, setData);
       else {
         setData(resData);
         // if (response.data.meta) setMeta(response.data.meta);

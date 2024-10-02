@@ -4,6 +4,7 @@ import Appointment from "../../models/appointment.model.js";
 
 export const validateAppointment = [
   body("name", "Name is required").trim().escape().notEmpty(),
+  body("title", "Title is required").trim().escape().notEmpty(),
   body("email").isEmail().withMessage("Invalid email"),
   body("phone").isMobilePhone().withMessage("Invalid phone number"),
   body("start").isISO8601().withMessage("Invalid date"),
@@ -16,7 +17,12 @@ export const validateAppointment = [
 
 export const validateAptUpdate = [
   param("id").isMongoId().withMessage("Invalid client ID"),
-  validateAppointment,
+  body("start").isISO8601().withMessage("Invalid date"),
+  body("end").isISO8601().withMessage("Invalid date"),
+  (req, res, next) => {
+    sanitizeUseFullInput(req, ["start", "end"], Appointment);
+    next();
+  },
 ];
 
 export const validateAppointmentId = [

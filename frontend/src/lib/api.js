@@ -77,10 +77,10 @@ const axiosFireApi = async (url, method = "get", data = {}) => {
       data: result.data,
     };
   } catch (error) {
-    console.log("ERROR", error.message);
+    console.log("ERROR", error.response.data.error);
     return {
       success: false,
-      error: error.response?.data?.error?.message,
+      error: error.response.data.error,
     };
   }
 };

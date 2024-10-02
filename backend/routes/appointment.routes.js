@@ -18,7 +18,7 @@ const router = express.Router();
 router.get("/", handleValidationErrors, getAppointmentList);
 router.post("/", validateAppointment, handleValidationErrors, createAppoitment);
 router.delete("/:id", validateAppointmentId, handleValidationErrors, deleteApt);
-router.put(
+router.patch(
   "/:id",
   validateAptUpdate,
   handleValidationErrors,

@@ -6,30 +6,35 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { INITIAL_EVENTS, createEventId } from "./event-utils";
 
-export default function CalendarBox(data) {
+export default function CalendarBox({
+  data,
+  handleDateSelect,
+  handleUpdateEvents,
+  handleDeleteEvent,
+}) {
   const [weekendsVisible, setWeekendsVisible] = useState(true);
   const [currentEvents, setCurrentEvents] = useState([]);
 
-  function handleWeekendsToggle() {
-    setWeekendsVisible(!weekendsVisible);
-  }
+  // function handleWeekendsToggle() {
+  //   setWeekendsVisible(!weekendsVisible);
+  // }
 
-  function handleDateSelect(selectInfo) {
-    let title = prompt("Please enter a new title for your event");
-    let calendarApi = selectInfo.view.calendar;
+  // function handleDateSelect(selectInfo) {
+  //   let title = prompt("Please enter a new title for your event");
+  //   let calendarApi = selectInfo.view.calendar;
 
-    calendarApi.unselect(); // clear date selection
-
-    if (title) {
-      calendarApi.addEvent({
-        id: createEventId(),
-        title,
-        start: selectInfo.startStr,
-        end: selectInfo.endStr,
-        allDay: selectInfo.allDay,
-      });
-    }
-  }
+  //   calendarApi.unselect(); // clear date selection
+  //   console.log("selectInfo", selectInfo);
+  //   if (title) {
+  //     calendarApi.addEvent({
+  //       id: createEventId(),
+  //       title,
+  //       start: selectInfo.startStr,
+  //       end: selectInfo.endStr,
+  //       allDay: selectInfo.allDay,
+  //     });
+  //   }
+  // }
 
   function handleEventClick(clickInfo) {
     if (
@@ -44,14 +49,13 @@ export default function CalendarBox(data) {
   function handleEvents(events) {
     setCurrentEvents(events);
   }
-
   return (
     <div className="demo-app">
-      <Sidebar
+      {/* <Sidebar
         weekendsVisible={weekendsVisible}
         handleWeekendsToggle={handleWeekendsToggle}
         currentEvents={currentEvents}
-      />
+      /> */}
       <div className="demo-app-main">
         <FullCalendar
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -60,17 +64,20 @@ export default function CalendarBox(data) {
             center: "title",
             right: "dayGridMonth,timeGridWeek,timeGridDay",
           }}
-          initialView="dayGridMonth"
+          initialView="timeGridWeek"
           editable={true}
           selectable={true}
           selectMirror={true}
           dayMaxEvents={true}
-          weekends={weekendsVisible}
-          initialEvents={INITIAL_EVENTS}
+          weekends={true}
+          initialEvents={data}
           select={handleDateSelect}
-          eventContent={renderEventContent} // custom render function
-          eventClick={handleEventClick}
-          eventsSet={handleEvents} // called after events are initialized/added/changed/removed
+          eventContent={(eventInfo) =>
+            renderEventContent(eventInfo, handleDeleteEvent)
+          } // custom render function
+          // eventClick={handleEventClick}
+          eventsSet={handleEvents}
+          eventChange={handleUpdateEvents}
           /* you can update a remote database when these fire:
           eventAdd={function(){}}
           eventChange={function(){}}
@@ -82,26 +89,26 @@ export default function CalendarBox(data) {
   );
 }
 
-function renderEventContent(eventInfo) {
+function renderEventContent(eventInfo, handleDeleteEvent) {
   return (
-    <>
-      <b>{eventInfo.timeText}</b>
-      <i>{eventInfo.event.title}</i>
-    </>
+    <div>
+      <p>{eventInfo.event.title}</p>
+      <small>{eventInfo.timeText}</small>
+      <button
+        onClick={() => {
+          handleDeleteEvent(eventInfo);
+          // eventInfo.event.remove();
+        }}
+      >
+        Delete
+      </button>
+    </div>
   );
 }
 
 function Sidebar({ weekendsVisible, handleWeekendsToggle, currentEvents }) {
   return (
-    <div className="demo-app-sidebar">
-      <div className="demo-app-sidebar-section">
-        <h2>Instructions</h2>
-        <ul>
-          <li>Select dates and you will be prompted to create a new event</li>
-          <li>Drag, drop, and resize events</li>
-          <li>Click an event to delete it</li>
-        </ul>
-      </div>
+    <div className="demo-app-sidebar hidden">
       <div className="demo-app-sidebar-section">
         <label>
           <input
